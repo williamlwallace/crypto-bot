@@ -3,7 +3,6 @@ import discord
 import requests
 import json
 from dotenv import load_dotenv
-from keep_alive import keep_alive
 
 load_dotenv()
 
@@ -35,6 +34,4 @@ async def on_message(message):
     chart_emoji = ':chart_with_upwards_trend:' if data['percent_change_24h'] > 0 else ':chart_with_downwards_trend:'
     await message.channel.send('>>> [**{0}**] Current Price: ${1} USD ({2} {3}%)\nFully Diluted Market Cap: ${4:,}\nCirculating Supply: {5:,}\nTotal Supply: {6:,}'.format(symbol, round(data['price'], 5), chart_emoji, round(data['percent_change_24h'], 2), round(data['fully_diluted_market_cap'], 2), round(data['circulating_supply'], 2), round(data['total_supply'], 2)))
 
-
-keep_alive()
-client.run(os.getenv("token"));
+client.run(os.getenv("token"))
