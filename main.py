@@ -10,7 +10,7 @@ load_dotenv()
 client = discord.Client()
 
 def get_data(symbol):
-    response = requests.get('http://127.0.0.1:3000/crypto/{0}'.format(symbol))
+    response = requests.get('https://crypto-data-api.herokuapp.com/crypto/{0}'.format(symbol))
     data = json.loads(response.text)
     return data
 
@@ -34,12 +34,12 @@ async def on_message(message):
         return
 
     if message.content.startswith('$-'):
-        await message.author.send('HA HA U SMELL SHAME LOL XD GOT U\n*farts on you*')
         symbol = message.content.split('$- ', 1)[-1].upper()
         data = get_data(symbol)
         chart_emoji = ':chart_with_upwards_trend:' if data[
             'percent_change_24h'] > 0 else ':chart_with_downwards_trend:'
         await message.channel.send('>>> [**{0}**] Current Price: ${1} USD ({2} {3}%)'.format(symbol, round(data["price"], 5), chart_emoji, round(data["percent_change_24h"], 2)))
+        # await message.author.send('HA HA U SMELL SHAME LOL XD GOT U\n*farts on you*')
 
     if message.content.startswith('$+'):
         symbol = message.content.split('$+ ', 1)[-1].upper()
