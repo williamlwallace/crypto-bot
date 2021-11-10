@@ -41,7 +41,14 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith('$-'):
+    if message.content.startswith('$- help'):
+        embed = discord.Embed(title='**Commands**', description='', color=0x201f55)
+        embed.add_field(name='Basic request', value='`$- {symbol}` e.g. `$- BTC`', inline=False)
+        embed.add_field(name='Advanced request', value='`$+ {symbol}` e.g. `$+ BTC`', inline=False)
+        embed.add_field(name='Help', value='`$+ help`', inline=False)
+        await message.channel.send(embed=embed)
+
+    elif message.content.startswith('$-'):
         symbol = message.content.split('$- ', 1)[-1].upper()
         data = get_data(symbol)
         percent_change = f':chart_with_upwards_trend: +{round(data["percent_change_24h"], 2)}%' if data[
@@ -52,7 +59,7 @@ async def on_message(message):
         embed.set_footer(text='Data provided by CoinMarketCap')
         await message.channel.send(embed=embed)
 
-    if message.content.startswith('$+'):
+    elif message.content.startswith('$+'):
         symbol = message.content.split('$+ ', 1)[-1].upper()
         data = get_data(symbol)
         percent_change = f':chart_with_upwards_trend: +{round(data["percent_change_24h"], 2)}%' if data[
@@ -66,12 +73,7 @@ async def on_message(message):
         embed.set_footer(text='Data provided by CoinMarketCap')
         await message.channel.send(embed=embed)
 
-    if message.content.startswith('$- help'):
-        embed = discord.Embed(title='**Help**', description='', color=0x201f55)
-        embed.add_field(name='Basic request', value='`$- {symbol}` e.g. `$- BTC`', inline=False)
-        embed.add_field(name='Advanced request', value='`$+ {symbol}` e.g. `$+ BTC`', inline=False)
-        embed.add_field(name='Help', value='`$+ help`', inline=False)
-        await message.channel.send(embed=embed)
+
 
 
 client.run(os.getenv("token"))
