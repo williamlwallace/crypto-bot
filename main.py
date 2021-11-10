@@ -27,7 +27,7 @@ async def on_guild_join(guild):
     for channel in guild.text_channels:
         if channel.permissions_for(guild.me).send_messages:
             # await channel.send('>>> Hey there! I am CryptoBot!\n`$- "Symbol"` for basic data e.g. `$- BTC`\n`$+ "Symbol"` for advanced data e.g. `$+ BTC`')
-            embed = discord.Embed(title='**Kia Ora!**', description='I am **CryptoBot** :robot:\nUse me to quickly retrieve coin prices, data and ***more!***', color=0x201f55)
+            embed = discord.Embed(title='**Kia Ora!**', description='I am **CryptoBot** :robot:\nUse me to quickly retrieve coin prices, data and *more!*', color=0x201f55)
             # embed.set_author(name='Kia Ora! I am CryptoBot! Use me to quickly retrieve coin prices, data and more')
             embed.add_field(name='Basic request', value='`$- {symbol}` e.g. `$- BTC`', inline=False)
             embed.add_field(name='Advanced request', value='`$+ {symbol}` e.g. `$+ BTC`', inline=False)
