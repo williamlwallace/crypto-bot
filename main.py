@@ -1,16 +1,18 @@
 import os
 import discord
-from discord import channel
 import requests
 import json
+from discord import channel
 from dotenv import load_dotenv
 
 load_dotenv()
 
 client = discord.Client()
 
+
 def get_data(symbol):
-    response = requests.get('https://crypto-data-api.herokuapp.com/crypto/{0}'.format(symbol))
+    response = requests.get(
+        'https://crypto-data-api.herokuapp.com/crypto/{0}'.format(symbol))
     data = json.loads(response.text)
     return data
 
@@ -24,7 +26,7 @@ async def on_ready():
 async def on_guild_join(guild):
     for channel in guild.text_channels:
         if channel.permissions_for(guild.me).send_messages:
-            await channel.send('>>> Hey there! I am CryptoBot!\n`$- "Symbol"` for basic data e.g. `$- SOL`\n`$+ "Symbol"` for advanced data e.g. `$+ SOL`')
+            await channel.send('>>> Hey there! I am CryptoBot!\n`$- "Symbol"` for basic data e.g. `$- BTC`\n`$+ "Symbol"` for advanced data e.g. `$+ BTC`')
         break
 
 
