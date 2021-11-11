@@ -3,26 +3,27 @@ import discord
 import requests
 import json
 from discord import channel
+from discord.ext import commands
 from dotenv import load_dotenv
 
 load_dotenv()
 
 client = discord.Client()
+bot = commands.Bot(command_prefix='$', activity=discord.Game(name="$- help"))
 
-
-def get_data(symbol):
+async def get_data(symbol):
     response = requests.get(
         'https://crypto-data-api.herokuapp.com/crypto/{0}'.format(symbol))
     data = json.loads(response.text)
     return data
 
 
-@client.event
+@bot.event
 async def on_ready():
-    print('Connected to Discord as {0.user}'.format(client))
+    print('Connected to Discord as {0.user}'.format(bot))
 
 
-@client.event
+@bot.event
 async def on_guild_join(guild):
     for channel in guild.text_channels:
         if channel.permissions_for(guild.me).send_messages:
@@ -36,9 +37,9 @@ async def on_guild_join(guild):
         break
 
 
-@client.event
+@bot.event
 async def on_message(message):
-    if message.author == client.user:
+    if message.author == bot.user:
         return
 
     if message.content.startswith('$- help'):
@@ -50,7 +51,7 @@ async def on_message(message):
 
     elif message.content.startswith('$-'):
         symbol = message.content.split('$- ', 1)[-1].upper()
-        data = get_data(symbol)
+        data = await get_data(symbol)
         percent_change = f':chart_with_upwards_trend: +{round(data["percent_change_24h"], 2)}%' if data[
             'percent_change_24h'] > 0 else f':chart_with_downwards_trend: {round(data["percent_change_24h"], 2)}%'
         # await message.channel.send('>>> [**{0}**] Current Price: ${1} USD ({2} {3}%)'.format(symbol, round(data["price"], 5), chart_emoji, round(data["percent_change_24h"], 2)))
@@ -61,7 +62,7 @@ async def on_message(message):
 
     elif message.content.startswith('$+'):
         symbol = message.content.split('$+ ', 1)[-1].upper()
-        data = get_data(symbol)
+        data = await get_data(symbol)
         percent_change = f':chart_with_upwards_trend: +{round(data["percent_change_24h"], 2)}%' if data[
             'percent_change_24h'] > 0 else f':chart_with_downwards_trend: {round(data["percent_change_24h"], 2)}%'
         # await message.channel.send('>>> [**{0}**] Current Price: ${1} USD ({2} {3}%)\nFully Diluted Market Cap: ${4:,}\nCirculating Supply: {5:,}\nTotal Supply: {6:,}'.format(symbol, round(data['price'], 5), chart_emoji, round(data['percent_change_24h'], 2), round(data['fully_diluted_market_cap'], 2), round(data['circulating_supply'], 2), round(data['total_supply'], 2)))
@@ -73,7 +74,24 @@ async def on_message(message):
         embed.set_footer(text='Data provided by CoinMarketCap')
         await message.channel.send(embed=embed)
 
+# @bot.command()
+# async def cb(ctx, arg):
+#     print(arg)
+#     symbol = arg.upper()
+#     data = await get_data(symbol)
+#     percent_change = f':chart_with_upwards_trend: +{round(data["percent_change_24h"], 2)}%' if data[
+#     'percent_change_24h'] > 0 else f':chart_with_downwards_trend: {round(data["percent_change_24h"], 2)}%'
+#     embed = discord.Embed(title=f'**${round(data["price"], 5):,}** USD ***{percent_change}***', description=f'', color=0x201f55)
+#     embed.set_author(name=symbol)
+#     embed.set_footer(text='Data provided by CoinMarketCap')
+#     await ctx.send(embed=embed)
 
+# @bot.command(
+#     help="Test help wtf",
+#     brief="This is a test brief"
+# )
+# async def test(ctx, arg):
+#     await ctx.send(arg)
 
-
-client.run(os.getenv("token"))
+# client.run(os.getenv("token"))
+bot.run(os.getenv("token"))
