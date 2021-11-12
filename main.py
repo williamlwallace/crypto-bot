@@ -49,6 +49,9 @@ async def on_message(message):
         embed.add_field(name='Help', value='`$- help`', inline=False)
         await message.channel.send(embed=embed)
 
+    elif message.content.startswith('$- weather'):
+        await message.channel.send("The Weather for tomorrow will be sunny with a chance of a bullrun on BTC and a bear run for all other alt coins...haha")
+
     elif message.content.startswith('$-'):
         symbol = message.content.split('$- ', 1)[-1].upper()
         data = await get_data(symbol)
