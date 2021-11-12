@@ -50,7 +50,7 @@ async def on_message(message):
         await message.channel.send(embed=embed)
 
     elif message.content.startswith('$- weather'):
-        await message.channel.send("The Weather for tomorrow will be sunny with a chance of a bullrun on BTC and a bear run for all other alt coins...haha")
+        await message.channel.send("The weather for tomorrow will be sunny with a chance of a bullrun on BTC and a bear run for all other alt coins")
 
     elif message.content.startswith('$-'):
         symbol = message.content.split('$- ', 1)[-1].upper()
